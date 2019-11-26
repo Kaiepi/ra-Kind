@@ -4,16 +4,16 @@
   ],
   "build-depends" : [ ],
   "depends" : [ ],
-  "description" : "blah blah blah",
+  "description" : "Typechecking based on kinds",
   "license" : "Artistic-2.0",
-  "name" : "Trait::Kind",
-  "perl" : "6.c",
+  "name" : "Kind",
+  "perl" : "6.d",
   "provides" : {
-    "Trait::Kind" : "lib/Trait/Kind.pm6"
+    "Kind" : "lib/Kind.pm6"
   },
   "resources" : [ ],
-  "source-url" : "",
-  "tags" : [ ],
+  "source-url" : "https://github.com/Kaiepi/p6-Kind.git",
+  "tags" : [ "kind" ],
   "test-depends" : [ ],
   "version" : "0.0.1"
 }
