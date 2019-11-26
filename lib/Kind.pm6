@@ -16,10 +16,6 @@ my role Instance[Mu \K] {
 #|[ Mixes in the Kind::Instance parametric role, which provides a "kind" method
     returning the given type parameter. ]
 method ^parameterize(Kind:U $this, Mu \K --> Kind:U) {
-    # Gets a name for K. Try to use .perl if the method exists (this may throw,
-    # like when using a junction of metaroles), then try to get K's type name
-    # if .perl couldn't be used and K's type supports naming, then use "?" if
-    # we still don't have a name by this point.
     sub name-of(Mu $obj is raw --> Str:D) {
         use nqp;
         (do (try $obj.perl)     if nqp::hllbool(nqp::can($obj, 'perl')))
