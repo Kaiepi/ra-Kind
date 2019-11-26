@@ -1,12 +1,12 @@
-NAME
-====
+=begin pod
+
+=head1 NAME
 
 Kind - Typechecking based on kinds
 
-SYNOPSIS
-========
+=head1 SYNOPSIS
 
-```perl6
+=begin code :lang<perl6>
 use Kind;
 
 my constant Class = Kind[Metamodel::ClassHOW];
@@ -17,53 +17,54 @@ multi sub is-class(Mu --> False)              { }
 
 say is-class Str;  # OUTPUT: True
 say is-class Blob; # OUTPUT: False
-```
+=end code
 
-DESCRIPTION
-===========
+=head1 DESCRIPTION
 
-Kind is an uninstantiable parametric type that can be used to typecheck values based off their kind. If parameterized, it may be used in a `where` clause or on the right-hand side of a smartmatch to typecheck a value's HOW against its type parameter.
+Kind is an uninstantiable parametric type that can be used to typecheck values
+based off their kind. If parameterized, it may be used in a C<where> clause or
+on the right-hand side of a smartmatch to typecheck a value's HOW against its
+type parameter.
 
-Kind is documented. You can view the documentation for it and its methods at any time using `WHY`.
+Kind is documented. You can view the documentation for it and its methods at
+any time using C<WHY>.
 
-For examples of how to use Kind with any of Rakudo's kinds, see `t/01-kind.t`.
+For examples of how to use Kind with any of Rakudo's kinds, see C<t/01-kind.t>.
 
-METAMETHODS
-===========
+=head1 METAMETHODS
 
-method parameterize
--------------------
+=head2 method parameterize
 
     method ^parameterize(Kind:U $this, Mu \K --> Kind:U) { }
 
-Mixes in a `kind` method to `$this` that returns `K`.
+Mixes in a C<kind> method to C<$this> that returns C<K>.
 
 Some useful values with which to parameterize Kind are:
 
-  * a metaclass or metarole
+=item a metaclass or metarole
 
-```perl6
+=begin code :lang<perl6>
 # Smartmatches any class.
 Kind[Metamodel::ClassHOW]
-```
+=end code
 
-  * a junction of metaclasses or metaroles
+=item a junction of metaclasses or metaroles
 
-```perl6
+=begin code :lang<perl6>
 # Smartmatches any type that supports naming, versioning, and documenting.
 Kind[Metamodel::Naming & Metamodel::Versioning & Metamodel::Documenting]
-```
+=end code
 
-  * a block
+=item a block
 
-```perl6
+=begin code :lang<perl6>
 # Smartmatches any parameterized type.
 Kind[{ use nqp; nqp::typeparameterized($_) !=:= nqp::null() }]
-```
+=end code
 
-  * a metaobject
+=item a metaobject
 
-```perl6
+=begin code :lang<perl6>
 # This class' metamethods ensure only instances of it can be passed to them.
 # Without Kind, any type that can typecheck as it would be possible to pass
 # (see t/01-kind.t for an example of this).
@@ -77,34 +78,32 @@ class Configurable {
         %CONFIGURATIONS{$this.WHAT.WHICH} // Map.new
     }
 }
-```
+=end code
 
-METHODS
-=======
+=head1 METHODS
 
-method ACCEPTS
---------------
+=head2 method ACCEPTS
 
     method ACCEPTS(Kind:U: Mu $checker --> Bool:D) { }
 
-Returns `True` if the HOW of `$checker` smartmatches against `Kind`'s type parameter, otherwise returns `False`.
+Returns C<True> if the HOW of C<$checker> smartmatches against C<Kind>'s type
+parameter, otherwise returns C<False>.
 
-method kind
------------
+=head2 method kind
 
     method kind(Kind:U: --> Mu) { }
 
-If `Kind` has been parameterized, returns its type parameter, otherwise fails.
+If C<Kind> has been parameterized, returns its type parameter, otherwise
+fails.
 
-AUTHOR
-======
+=head1 AUTHOR
 
 Ben Davies (Kaiepi)
 
-COPYRIGHT AND LICENSE
-=====================
+=head1 COPYRIGHT AND LICENSE
 
 Copyright 2019 Ben Davies
 
 This library is free software; you can redistribute it and/or modify it under the Artistic License 2.0.
 
+=end pod
