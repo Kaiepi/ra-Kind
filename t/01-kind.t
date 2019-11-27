@@ -2,7 +2,7 @@ use v6.d;
 use Kind;
 use Test;
 
-plan 15;
+plan 16;
 
 dies-ok { Kind.new },
   'cannot create an instance of Kind using method new';
@@ -170,6 +170,21 @@ subtest 'packages', {
     ok is-package(Foo),
       'can typecheck a package';
     nok is-package(Mu),
+      'cannot typecheck anything else';
+};
+
+subtest 'blocks', {
+    my constant Parametric = Kind[{ use nqp; nqp::hllbool(nqp::can($_, 'parameterize')) }];
+
+    plan 2;
+
+    proto sub is-parametric(Mu --> Bool:D)                  {*}
+    multi sub is-parametric(Mu $ where Parametric --> True) { }
+    multi sub is-parametric(Mu --> False)                   { }
+
+    ok is-parametric(Blob),
+      'can typecheck a parametric type';
+    nok is-parametric(Str),
       'cannot typecheck anything else';
 };
 

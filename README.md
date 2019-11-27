@@ -59,8 +59,8 @@ Kind[Metamodel::Naming & Metamodel::Versioning & Metamodel::Documenting]
   * a block
 
 ```perl6
-# Smartmatches any parameterized type.
-Kind[{ use nqp; nqp::typeparameterized($_) !=:= nqp::null() }]
+# Smartmatches any parametric type.
+Kind[{ use nqp; nqp::hllbool(nqp::can($_, 'parameterize')) }]
 ```
 
   * a metaobject
