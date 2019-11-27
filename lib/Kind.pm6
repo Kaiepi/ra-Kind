@@ -36,4 +36,3 @@ method ACCEPTS(Kind:U: Mu $checker --> Bool:D) {
 #|[ Fails. Once this type is parameterized, this method will return its type
     parameter. ]
 method kind(Kind:U: --> Mu) { ... }
-
