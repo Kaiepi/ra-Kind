@@ -2,7 +2,7 @@ use v6.d;
 use Kind;
 use Test;
 
-plan 16;
+plan 17;
 
 dies-ok { Kind.new },
   'cannot create an instance of Kind using method new';
@@ -41,6 +41,10 @@ dies-ok { Kind.CREATE },
 #   is Kind[MinimalHOW.new_type].^name,
 #     'Kind[?]',
 #     'can name a Kind whose parameter neither supports .perl nor has a HOW that supports naming';
+
+    lives-ok {
+        Mu ~~ Kind[Metamodel::AttributeContainer]
+    }, 'can typecheck against Kind when parameterized with an NQPParametricRoleHOW';
 }
 
 subtest 'classes', {

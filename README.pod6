@@ -25,7 +25,7 @@ say is-class Blob; # OUTPUT: False
 
 Kind is an uninstantiable parametric type that can be used to typecheck values
 based off their kind. If parameterized, it may be used in a C<where> clause or
-on the right-hand side of a smartmatch to typecheck a value's HOW against its
+on the right-hand side of a typecheck to typecheck a value's HOW against its
 type parameter.
 
 Kind is documented. You can view the documentation for it and its methods at
@@ -39,7 +39,13 @@ For examples of how to use Kind with any of Rakudo's kinds, see C<t/01-kind.t>.
 
     method ^parameterize(Kind:U $this, Mu \K --> Kind:U) { }
 
-Mixes in a C<kind> method to C<$this> that returns C<K>.
+Mixes in a C<kind> method to C<$this> that returns C<K>, as well as an
+C<ACCEPTS> method. What the C<ACCEPTS> method does depends on C<K>: if it has
+an C<ACCEPTS> method, this will smartmatch its argument's HOW against C<K>,
+otherwise C<Metamodel::Primitives.is_type> will be invoked with its argument's
+HOW and C<K>. Most of the time, the former will be the case; the latter
+behaviour exists because it's not guaranteed C<K> will actually have C<Mu>'s
+methods (this is case with Rakudo's metaroles).
 
 Some useful values with which to parameterize Kind are:
 

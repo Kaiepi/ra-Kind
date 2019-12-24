@@ -24,7 +24,7 @@ say is-class Blob; # OUTPUT: False
 DESCRIPTION
 ===========
 
-Kind is an uninstantiable parametric type that can be used to typecheck values based off their kind. If parameterized, it may be used in a `where` clause or on the right-hand side of a smartmatch to typecheck a value's HOW against its type parameter.
+Kind is an uninstantiable parametric type that can be used to typecheck values based off their kind. If parameterized, it may be used in a `where` clause or on the right-hand side of a typecheck to typecheck a value's HOW against its type parameter.
 
 Kind is documented. You can view the documentation for it and its methods at any time using `WHY`.
 
@@ -38,7 +38,7 @@ method parameterize
 
     method ^parameterize(Kind:U $this, Mu \K --> Kind:U) { }
 
-Mixes in a `kind` method to `$this` that returns `K`.
+Mixes in a `kind` method to `$this` that returns `K`, as well as an `ACCEPTS` method. What the `ACCEPTS` method does depends on `K`: if it has an `ACCEPTS` method, this will smartmatch its argument's HOW against `K`, otherwise `Metamodel::Primitives.is_type` will be invoked with its argument's HOW and `K`. Most of the time, the former will be the case; the latter behaviour exists because it's not guaranteed `K` will actually have `Mu`'s methods (this is case with Rakudo's metaroles).
 
 Some useful values with which to parameterize Kind are:
 
