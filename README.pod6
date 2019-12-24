@@ -40,12 +40,8 @@ For examples of how to use Kind with any of Rakudo's kinds, see C<t/01-kind.t>.
     method ^parameterize(Kind:U $this, Mu \K --> Kind:U) { }
 
 Mixes in a C<kind> method to C<$this> that returns C<K>, as well as an
-C<ACCEPTS> method. What the C<ACCEPTS> method does depends on C<K>: if it has
-an C<ACCEPTS> method, this will smartmatch its argument's HOW against C<K>,
-otherwise C<Metamodel::Primitives.is_type> will be invoked with its argument's
-HOW and C<K>. Most of the time, the former will be the case; the latter
-behaviour exists because it's not guaranteed C<K> will actually have C<Mu>'s
-methods (this is case with Rakudo's metaroles).
+C<ACCEPTS> method. What this does depends on C<K>; refer to the documentation
+for it.
 
 Some useful values with which to parameterize Kind are:
 
@@ -96,6 +92,12 @@ class Configurable {
 
 Returns C<True> if the HOW of C<$checker> smartmatches against C<Kind>'s type
 parameter, otherwise returns C<False>.
+
+If C<Kind>'s type parameter has an C<ACCEPTS> method, this will smartmatch the
+HOW of C<$checker> against it; otherwise, C<Metamodel::Primitives.is_type> will
+be invoked with C<$checker>'s HOW and it. Most of the time, the former will be
+the case; the latter behaviour exists because it's not guaranteed C<K> will
+actually have C<Mu>'s methods (this is case with Rakudo's metaroles).
 
 =head2 method kind
 

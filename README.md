@@ -38,7 +38,7 @@ method parameterize
 
     method ^parameterize(Kind:U $this, Mu \K --> Kind:U) { }
 
-Mixes in a `kind` method to `$this` that returns `K`, as well as an `ACCEPTS` method. What the `ACCEPTS` method does depends on `K`: if it has an `ACCEPTS` method, this will smartmatch its argument's HOW against `K`, otherwise `Metamodel::Primitives.is_type` will be invoked with its argument's HOW and `K`. Most of the time, the former will be the case; the latter behaviour exists because it's not guaranteed `K` will actually have `Mu`'s methods (this is case with Rakudo's metaroles).
+Mixes in a `kind` method to `$this` that returns `K`, as well as an `ACCEPTS` method. What this does depends on `K`; refer to the documentation for it.
 
 Some useful values with which to parameterize Kind are:
 
@@ -90,6 +90,8 @@ method ACCEPTS
     method ACCEPTS(Kind:U: Mu $checker --> Bool:D) { }
 
 Returns `True` if the HOW of `$checker` smartmatches against `Kind`'s type parameter, otherwise returns `False`.
+
+If `Kind`'s type parameter has an `ACCEPTS` method, this will smartmatch the HOW of `$checker` against it; otherwise, `Metamodel::Primitives.is_type` will be invoked with `$checker`'s HOW and it. Most of the time, the former will be the case; the latter behaviour exists because it's not guaranteed `K` will actually have `Mu`'s methods (this is case with Rakudo's metaroles).
 
 method kind
 -----------
