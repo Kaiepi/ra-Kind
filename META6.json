@@ -13,7 +13,7 @@
   },
   "resources" : [ ],
   "source-url" : "https://github.com/Kaiepi/p6-Kind.git",
-  "tags" : [ "kind" ],
+  "tags" : [ "kind", "type" ],
   "test-depends" : [ ],
   "version" : "0.0.1"
 }
