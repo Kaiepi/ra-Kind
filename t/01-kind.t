@@ -2,16 +2,20 @@ use v6.d;
 use Kind;
 use Test;
 
-plan 17;
+plan 12;
 
-dies-ok { Kind.new },
-  'cannot create an instance of Kind using method new';
-dies-ok { Kind.bless },
-  'cannot create an instance of Kind using method bless';
-dies-ok { Kind.CREATE },
-  'cannot create an instance of Kind using submethod CREATE';
+subtest 'instantiation', {
+    plan 3;
 
-{
+    dies-ok { Kind.new },
+      'cannot create an instance of Kind using method new';
+    dies-ok { Kind.bless },
+      'cannot create an instance of Kind using method bless';
+    dies-ok { Kind.CREATE },
+      'cannot create an instance of Kind using submethod CREATE';
+};
+
+subtest 'naming', {
     my class MinimalHOW {
         method new_type(MinimalHOW:_: --> Mu) {
             my MinimalHOW:D $meta := self.new;
@@ -28,6 +32,8 @@ dies-ok { Kind.CREATE },
         }
     }
 
+    plan 4;
+
     is Kind[Metamodel::ClassHOW].^name,
       'Kind[Perl6::Metamodel::ClassHOW]',
       'can name a Kind whose parameter supports .perl';
@@ -41,11 +47,18 @@ dies-ok { Kind.CREATE },
 #   is Kind[MinimalHOW.new_type].^name,
 #     'Kind[?]',
 #     'can name a Kind whose parameter neither supports .perl nor has a HOW that supports naming';
+};
 
+subtest 'Rakudo metaroles', {
+    plan 2;
+
+    my Bool:D $result = False;
     lives-ok {
-        Mu ~~ Kind[Metamodel::AttributeContainer]
-    }, 'can typecheck against Kind when parameterized with an NQPParametricRoleHOW';
-}
+        $result = Mu ~~ Kind[Metamodel::AttributeContainer];
+    }, 'typechecking against Kind does not throw...';
+    ok $result,
+      '...and the result is correct';
+};
 
 subtest 'classes', {
     my constant Class = Kind[Metamodel::ClassHOW];
