@@ -2,3 +2,7 @@ Revision history for Kind
 
 v0.0.1
     - Initial version
+
+v0.1.0
+    - Fallback to typechecking Metamodel::Primitives.is_type when Kind's type
+      parameter does not have an ACCEPTS method.
