@@ -6,6 +6,10 @@ use v6.d;
 unit class Kind:ver<0.1.0>:auth<github:Kaiepi>:api<0>
         is repr<Uninstantiable>;
 
+#|[ Fails. Once this type is parameterized, this method will return its type
+    parameter. ]
+method kind(Kind:U: --> Mu) { !!! }
+
 #|[ Used to mix in a "kind" method to this type, returning the value it was
     parameterized with. ]
 my role Instance[Mu \K] {
@@ -56,7 +60,3 @@ method ^parameterize(Kind:U $this, Mu \K --> Kind:U) {
     $mixin.^set_name: self.name($this) ~ '[' ~ name-of(K) ~ ']';
     $mixin
 }
-
-#|[ Fails. Once this type is parameterized, this method will return its type
-    parameter. ]
-method kind(Kind:U: --> Mu) { ... }
