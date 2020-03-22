@@ -52,7 +52,7 @@ sub name-of(Mu $obj is raw --> Str:D) {
 #|[ Mixes in the Kind::Instance parametric role, which provides a "kind" method
     returning the given type parameter. ]
 method ^parameterize(Kind:U $this, Mu \K --> Kind:U) {
-    my Mu $mixin := $this.^mixin: role-for K;
+    my Mu $mixin := self.mixin: $this, role-for K;
     $mixin.^set_name: self.name($this) ~ '[' ~ name-of(K) ~ ']';
     $mixin
 }
