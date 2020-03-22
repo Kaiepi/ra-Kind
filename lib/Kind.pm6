@@ -3,7 +3,7 @@ use v6;
     on their kind. Once parameterized, smartmatching a value against it will only
     succeed if the value's HOW smartmatches against its type parameter. Attempting
     to smartmatch against it before then will throw. ]
-unit class Kind:ver<0.1.0>:auth<github:Kaiepi>:api<0>
+unit class Kind:ver<0.1.1>:auth<github:Kaiepi>:api<0>
         is repr<Uninstantiable>;
 
 #|[ Fails. Once this type is parameterized, this method will return its type

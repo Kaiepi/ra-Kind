@@ -6,3 +6,8 @@ v0.0.1
 v0.1.0
     - Fallback to typechecking Metamodel::Primitives.is_type when Kind's type
       parameter does not have an ACCEPTS method.
+
+v0.1.1
+    - Use v6 instead of v6.d
+    - Fix naming of Kind parameterizations where the parameter's HOW has a name
+      method, but does not do Metamodel::Naming
