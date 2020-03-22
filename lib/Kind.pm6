@@ -40,16 +40,15 @@ my role IsType[Mu \K] does Instance[K] {
 #|  with the kind passed). ]
 sub role-for(Mu \K --> Mu) {
     use nqp;
-    nqp::hllbool(nqp::can(K, 'ACCEPTS'))
-        ?? Accepts.^parameterize(K)
-        !! IsType.^parameterize(K)
+    my Mu $role := nqp::can(K, 'ACCEPTS') ?? Accepts !! IsType;
+    $role.^parameterize: K
 }
 
 #|[ Generates a name for a kind. ]
 sub name-of(Mu $obj is raw --> Str:D) {
     use nqp;
-    (do (try $obj.perl)     if nqp::hllbool(nqp::can($obj, 'perl')))
- // (do $obj.HOW.name($obj) if nqp::hllbool(nqp::istype($obj.HOW, Metamodel::Naming)))
+    (do (try $obj.perl)     if nqp::can($obj, 'perl'))
+ // (do $obj.HOW.name($obj) if nqp::istype($obj.HOW, Metamodel::Naming))
  // '?'
 }
 
