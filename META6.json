@@ -7,7 +7,7 @@
   "description" : "Typechecking based on kinds",
   "license" : "Artistic-2.0",
   "name" : "Kind",
-  "perl" : "6.d",
+  "perl" : "6",
   "provides" : {
     "Kind" : "lib/Kind.pm6"
   },

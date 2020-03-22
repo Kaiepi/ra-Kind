@@ -1,4 +1,4 @@
-use v6.d;
+use v6;
 #|[ An uninstantiable parametric type that can be used to typecheck values based
     on their kind. Once parameterized, smartmatching a value against it will only
     succeed if the value's HOW smartmatches against its type parameter. Attempting
