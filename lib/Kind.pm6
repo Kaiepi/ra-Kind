@@ -48,7 +48,7 @@ sub role-for(Mu \K --> Mu) {
 sub name-of(Mu $obj is raw --> Str:D) {
     use nqp;
     (do (try $obj.perl)     if nqp::can($obj, 'perl'))
- // (do $obj.HOW.name($obj) if nqp::istype($obj.HOW, Metamodel::Naming))
+ // (do $obj.HOW.name($obj) if nqp::can($obj.HOW, 'name'))
  // '?'
 }
 
