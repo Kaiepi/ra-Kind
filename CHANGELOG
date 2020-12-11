@@ -11,3 +11,6 @@ v0.1.1
     - Use v6 instead of v6.d
     - Fix naming of Kind parameterizations where the parameter's HOW has a name
       method, but does not do Metamodel::Naming
+
+v0.2.0
+    - Permit use of Kind as an unparameterized type.

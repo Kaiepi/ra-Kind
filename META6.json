@@ -15,6 +15,7 @@
   "source-url" : "https://github.com/Kaiepi/ra-Kind.git",
   "tags" : [ "kind", "type" ],
   "test-depends" : [ ],
-  "version" : "0.1.1",
-  "auth" : "github:Kaiepi"
+  "version" : "0.2.0",
+  "auth" : "github:Kaiepi",
+  "api" : "1"
 }
