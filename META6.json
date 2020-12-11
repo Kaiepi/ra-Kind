@@ -12,7 +12,7 @@
     "Kind" : "lib/Kind.pm6"
   },
   "resources" : [ ],
-  "source-url" : "https://github.com/Kaiepi/p6-Kind.git",
+  "source-url" : "https://github.com/Kaiepi/ra-Kind.git",
   "tags" : [ "kind", "type" ],
   "test-depends" : [ ],
   "version" : "0.1.1",
