@@ -25,7 +25,7 @@ say is-class Blob; # OUTPUT: False
 
 Kind is an uninstantiable parametric type that can be used to typecheck values
 based off their kind. If parameterized, it may be used in a C<where> clause or
-on the right-hand side of a typecheck to typecheck a value's HOW against its
+on the right-hand side of a smartmatch to typecheck a value's HOW against its
 type parameter.
 
 Kind is documented. You can view the documentation for it and its methods at
@@ -90,12 +90,12 @@ class Configurable {
 
     method ACCEPTS(Kind:U: Mu $checker --> Bool:D) { }
 
-Returns C<True> if the HOW of C<$checker> smartmatches against C<Kind>'s type
+Returns C<True> if the HOW of C<$checker> typechecks against C<Kind>'s type
 parameter, otherwise returns C<False>.
 
 If C<Kind>'s type parameter has an C<ACCEPTS> method, this will smartmatch the
 HOW of C<$checker> against it; otherwise, C<Metamodel::Primitives.is_type> will
-be invoked with C<$checker>'s HOW and it. Most of the time, the former will be
+be called with C<$checker>'s HOW and it. Most of the time, the former will be
 the case; the latter behaviour exists because it's not guaranteed C<K> will
 actually have C<Mu>'s methods (this is case with Rakudo's metaroles).
 
@@ -112,7 +112,7 @@ Ben Davies (Kaiepi)
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright 2019 Ben Davies
+Copyright 2020 Ben Davies
 
 This library is free software; you can redistribute it and/or modify it under the Artistic License 2.0.
 

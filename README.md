@@ -24,7 +24,7 @@ say is-class Blob; # OUTPUT: False
 DESCRIPTION
 ===========
 
-Kind is an uninstantiable parametric type that can be used to typecheck values based off their kind. If parameterized, it may be used in a `where` clause or on the right-hand side of a typecheck to typecheck a value's HOW against its type parameter.
+Kind is an uninstantiable parametric type that can be used to typecheck values based off their kind. If parameterized, it may be used in a `where` clause or on the right-hand side of a smartmatch to typecheck a value's HOW against its type parameter.
 
 Kind is documented. You can view the documentation for it and its methods at any time using `WHY`.
 
@@ -89,9 +89,9 @@ method ACCEPTS
 
     method ACCEPTS(Kind:U: Mu $checker --> Bool:D) { }
 
-Returns `True` if the HOW of `$checker` smartmatches against `Kind`'s type parameter, otherwise returns `False`.
+Returns `True` if the HOW of `$checker` typechecks against `Kind`'s type parameter, otherwise returns `False`.
 
-If `Kind`'s type parameter has an `ACCEPTS` method, this will smartmatch the HOW of `$checker` against it; otherwise, `Metamodel::Primitives.is_type` will be invoked with `$checker`'s HOW and it. Most of the time, the former will be the case; the latter behaviour exists because it's not guaranteed `K` will actually have `Mu`'s methods (this is case with Rakudo's metaroles).
+If `Kind`'s type parameter has an `ACCEPTS` method, this will smartmatch the HOW of `$checker` against it; otherwise, `Metamodel::Primitives.is_type` will be called with `$checker`'s HOW and it. Most of the time, the former will be the case; the latter behaviour exists because it's not guaranteed `K` will actually have `Mu`'s methods (this is case with Rakudo's metaroles).
 
 method kind
 -----------
@@ -108,7 +108,7 @@ Ben Davies (Kaiepi)
 COPYRIGHT AND LICENSE
 =====================
 
-Copyright 2019 Ben Davies
+Copyright 2020 Ben Davies
 
 This library is free software; you can redistribute it and/or modify it under the Artistic License 2.0.
 
