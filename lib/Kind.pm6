@@ -1,61 +1,43 @@
 use v6;
 #|[ An uninstantiable parametric type that can be used to typecheck values based
-    on their kind. Once parameterized, smartmatching a value against it will only
-    succeed if the value's HOW smartmatches against its type parameter. Attempting
-    to smartmatch against it before then will throw. ]
-unit class Kind:ver<0.1.1>:auth<github:Kaiepi>:api<0>
-        is repr<Uninstantiable>;
+    on their kind. Once parameterized with a kind of type, smartmatching a type
+    object against this will result in a typecheck based on the type's HOW. ]
+unit class Kind:ver<0.1.1>:auth<github:Kaiepi>:api<0> is repr<Uninstantiable>;
 
-#|[ Fails. Once this type is parameterized, this method will return its type
-    parameter. ]
-method kind(Kind:U: --> Mu) { !!! }
-
-#|[ Used to mix in a "kind" method to this type, returning the value it was
-    parameterized with. ]
-my role Instance[Mu \K] {
-    #|[ Returns this type's type parameter. ]
-    method kind(Kind:U: --> Mu) { K }
+#|[ Defines the API of a parameterized Kind. ]
+my role Of[Mu:_ \K] {
+    #|[ Returns the kind of type with which this type object smartmatches. ]
+    method kind(::?CLASS:U: --> Mu:_) { K }
+    #|[ Stub (fails). When implemented, this should accept a type based on
+        its HOW. ]
+    method ACCEPTS(::?CLASS:U: Mu:_ $checker is raw) { ... }
 }
 
-#|[ Handles typechecking for kinds that have an ACCEPTS method. ]
-my role Accepts[Mu \K] does Instance[K] {
-    #|[ Smartmatches its argument's HOW against this type's type parameter. ]
-    method ACCEPTS(Kind:U: Mu $checker --> Bool:D) {
-        so $checker.HOW ~~ K
+#|[ A mixin that smartmatches using a kind of Raku type. ]
+my role Of::Type[Mu:_ \K where Metamodel::Primitives.is_type: $_, Mu] does Of[K] {
+    #|[ Whether or not a kind of type can smartmatch against our own. ]
+    method ACCEPTS(::?CLASS:U: Mu:_ $checker is raw) {
+        K.ACCEPTS: $checker.HOW
     }
 }
-
-#|[ Handles typechecking for kinds that do not have an ACCEPTS method. This is
-#|  the case when Rakudo's metaroles are passed as type parameters, since they
-#|  do not have Mu's methods. ]
-my role IsType[Mu \K] does Instance[K] {
-    #|[ Calls Metamodel::Primitives.is_type with its argument's HOW and this
-    #|  type's type parameter. ]
-    method ACCEPTS(Kind:U: Mu $checker --> Bool:D) {
+#|[ A mixin that smartmatches using an unknown kind of type. ]
+my role Of::Type[Mu:_ \K] does Of[K] {
+    #|[ Whether or not a kind of type can typecheck against our own. ]
+    method ACCEPTS(::?CLASS:U: Mu:_ $checker is raw) {
         Metamodel::Primitives.is_type: $checker.HOW, K
     }
 }
 
-#|[ Returns the role to mix in to Kind (either Accepts or IsType, parameterized
-#|  with the kind passed). ]
-sub role-for(Mu \K --> Mu) {
-    use nqp;
-    my Mu $role := nqp::can(K, 'ACCEPTS') ?? Accepts !! IsType;
-    $role.^parameterize: K
-}
-
-#|[ Generates a name for a kind. ]
-sub name-of(Mu $obj is raw --> Str:D) {
-    use nqp;
-    (do (try $obj.perl)     if nqp::can($obj, 'perl'))
- // (do $obj.HOW.name($obj) if nqp::can($obj.HOW, 'name'))
- // '?'
-}
-
-#|[ Mixes in the Kind::Instance parametric role, which provides a "kind" method
-    returning the given type parameter. ]
-method ^parameterize(Kind:U $this, Mu \K --> Kind:U) {
-    my Mu $mixin := self.mixin: $this, role-for K;
-    $mixin.^set_name: self.name($this) ~ '[' ~ name-of(K) ~ ']';
+#|[ Mixes in a Kind::Of::Type with which types of its kind can be smartmatched. ]
+method ^parameterize(::?CLASS:U $this is raw, Mu:_ \K --> ::?CLASS:U) {
+    my ::?CLASS:U $mixin := self.mixin: $this, Of::Type.^parameterize: K;
+    $mixin.^set_name: self.name($this) ~ '[' ~ NAME(K) ~ ']';
     $mixin
+}
+
+sub NAME(Mu:_ $obj is raw --> Str:D) {
+    use nqp;
+    (try $obj.raku  if nqp::can($obj, 'raku'))     orelse
+    (try $obj.^name if nqp::can($obj.HOW, 'name')) orelse
+    '?'
 }
