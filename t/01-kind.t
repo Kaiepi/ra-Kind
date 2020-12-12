@@ -217,6 +217,9 @@ subtest 'typechecking', {
 
         my constant Unknown = do {
             my class UnknownHOW does Metamodel::Naming {
+                my $archetypes = Metamodel::Archetypes.new(:nominal);
+                method archetypes { $archetypes }
+
                 method new_type(UnknownHOW:_: --> Mu) {
                     my UnknownHOW:D $meta := self.new;
                     my Mu           $type := Metamodel::Primitives.create_type: $meta, 'Uninstantiable';
