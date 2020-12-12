@@ -2,7 +2,7 @@ use v6;
 #|[ An uninstantiable parametric type that can be used to typecheck values based
     on their kind. Once parameterized with a kind of type, smartmatching a type
     object against this will result in a typecheck based on the type's HOW. ]
-unit class Kind:ver<0.2.0>:auth<github:Kaiepi>:api<1> is repr<Uninstantiable>;
+unit class Kind:ver<0.2.1>:auth<github:Kaiepi>:api<1> is repr<Uninstantiable>;
 
 #|[ Defines the API of a parameterized Kind. ]
 my role Of[Mu:_ \K] {
