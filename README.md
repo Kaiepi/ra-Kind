@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/Kaiepi/ra-Kind.svg?branch=master)](https://travis-ci.com/Kaiepi/ra-Kind)
+[![Build Status](https://travis-ci.com/Kaiepi/p6-Kind.svg?branch=master)](https://travis-ci.com/Kaiepi/p6-Kind)
 
 NAME
 ====
@@ -8,7 +8,7 @@ Kind - Typechecking based on kinds
 SYNOPSIS
 ========
 
-```perl6
+```raku
 use Kind;
 
 my constant Class = Kind[Metamodel::ClassHOW];
@@ -36,39 +36,40 @@ METAMETHODS
 method parameterize
 -------------------
 
-    method ^parameterize(Kind:U $this, Mu \K --> Kind:U) { }
+```raku
+method ^parameterize(Kind:U $this is raw, Mu \K --> Kind:U) { }
+```
 
-Mixes in a `kind` method to `$this` that returns `K`, as well as an `ACCEPTS` method. What this does depends on `K`; refer to the documentation for it.
+Mixes in `kind` and `ACCEPTS` methods. See below.
 
 Some useful values with which to parameterize Kind are:
 
   * a metaclass or metarole
 
-```perl6
+```raku
 # Smartmatches any class.
 Kind[Metamodel::ClassHOW]
 ```
 
   * a junction of metaclasses or metaroles
 
-```perl6
+```raku
 # Smartmatches any type that supports naming, versioning, and documenting.
 Kind[Metamodel::Naming & Metamodel::Versioning & Metamodel::Documenting]
 ```
 
   * a block
 
-```perl6
+```raku
 # Smartmatches any parametric type.
 Kind[{ use nqp; nqp::hllbool(nqp::can($_, 'parameterize')) }]
 ```
 
   * a metaobject
 
-```perl6
-# This class' metamethods ensure only instances of it can be passed to them.
-# Without Kind, any type that can typecheck as it would be possible to pass
-# (see t/01-kind.t for an example of this).
+```raku
+# This class' metamethods ensure they can only be called with itself or its
+# subclasses.
 class Configurable {
     my Map:D %CONFIGURATIONS{ObjAt:D};
 
@@ -84,12 +85,12 @@ class Configurable {
 METHODS
 =======
 
-Note: these only exist after `Kind` has been parameterized.
-
 method ACCEPTS
 --------------
 
-    method ACCEPTS(Kind:U: Mu $checker --> Bool:D) { }
+```raku
+method ACCEPTS(Kind:U: Mu $checker is raw) { }
+```
 
 Returns `True` if the HOW of `$checker` typechecks against `Kind`'s type parameter, otherwise returns `False`.
 
@@ -98,7 +99,9 @@ If `Kind`'s type parameter has an `ACCEPTS` method, this will smartmatch the HOW
 method kind
 -----------
 
-    method kind(Kind:U: --> Mu) { }
+```raku
+method kind(Kind:U: --> Mu) { }
+```
 
 Returns `Kind`'s type parameter.
 

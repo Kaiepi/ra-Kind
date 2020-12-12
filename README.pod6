@@ -1,6 +1,6 @@
 =begin pod
 
-[![Build Status](https://travis-ci.com/Kaiepi/ra-Kind.svg?branch=master)](https://travis-ci.com/Kaiepi/ra-Kind)
+[![Build Status](https://travis-ci.com/Kaiepi/p6-Kind.svg?branch=master)](https://travis-ci.com/Kaiepi/p6-Kind)
 
 =head1 NAME
 
@@ -8,7 +8,7 @@ Kind - Typechecking based on kinds
 
 =head1 SYNOPSIS
 
-=begin code :lang<perl6>
+=begin code :lang<raku>
 use Kind;
 
 my constant Class = Kind[Metamodel::ClassHOW];
@@ -37,41 +37,36 @@ For examples of how to use Kind with any of Rakudo's kinds, see C<t/01-kind.t>.
 
 =head2 method parameterize
 
-    method ^parameterize(Kind:U $this, Mu \K --> Kind:U) { }
+=for code :lang<raku>
+method ^parameterize(Kind:U $this is raw, Mu \K --> Kind:U) { }
 
-Mixes in a C<kind> method to C<$this> that returns C<K>, as well as an
-C<ACCEPTS> method. What this does depends on C<K>; refer to the documentation
-for it.
+Mixes in C<kind> and C<ACCEPTS> methods. See below.
 
 Some useful values with which to parameterize Kind are:
 
 =item a metaclass or metarole
 
-=begin code :lang<perl6>
+=for code :lang<raku>
 # Smartmatches any class.
 Kind[Metamodel::ClassHOW]
-=end code
 
 =item a junction of metaclasses or metaroles
 
-=begin code :lang<perl6>
+=for code :lang<raku>
 # Smartmatches any type that supports naming, versioning, and documenting.
 Kind[Metamodel::Naming & Metamodel::Versioning & Metamodel::Documenting]
-=end code
 
 =item a block
 
-=begin code :lang<perl6>
+=for code :lang<raku>
 # Smartmatches any parametric type.
 Kind[{ use nqp; nqp::hllbool(nqp::can($_, 'parameterize')) }]
-=end code
 
 =item a metaobject
 
-=begin code :lang<perl6>
-# This class' metamethods ensure only instances of it can be passed to them.
-# Without Kind, any type that can typecheck as it would be possible to pass
-# (see t/01-kind.t for an example of this).
+=begin code :lang<raku>
+# This class' metamethods ensure they can only be called with itself or its
+# subclasses.
 class Configurable {
     my Map:D %CONFIGURATIONS{ObjAt:D};
 
@@ -86,11 +81,10 @@ class Configurable {
 
 =head1 METHODS
 
-Note: these only exist after C<Kind> has been parameterized.
-
 =head2 method ACCEPTS
 
-    method ACCEPTS(Kind:U: Mu $checker --> Bool:D) { }
+=for code :lang<raku>
+method ACCEPTS(Kind:U: Mu $checker is raw) { }
 
 Returns C<True> if the HOW of C<$checker> typechecks against C<Kind>'s type
 parameter, otherwise returns C<False>.
@@ -103,7 +97,8 @@ actually have C<Mu>'s methods (this is case with Rakudo's metaroles).
 
 =head2 method kind
 
-    method kind(Kind:U: --> Mu) { }
+=for code :lang<raku>
+method kind(Kind:U: --> Mu) { }
 
 Returns C<Kind>'s type parameter.
 
