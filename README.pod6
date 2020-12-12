@@ -1,6 +1,6 @@
 =begin pod
 
-[![Build Status](https://travis-ci.com/Kaiepi/p6-Kind.svg?branch=master)](https://travis-ci.com/Kaiepi/p6-Kind)
+[![Build Status](https://travis-ci.com/Kaiepi/ra-Kind.svg?branch=master)](https://travis-ci.com/Kaiepi/ra-Kind)
 
 =head1 NAME
 
@@ -17,8 +17,8 @@ proto sub is-class(Mu --> Bool:D)             {*}
 multi sub is-class(Mu $ where Class --> True) { }
 multi sub is-class(Mu --> False)              { }
 
-say is-class Str;  # OUTPUT: True
-say is-class Blob; # OUTPUT: False
+say Str.&is-class;  # OUTPUT: True
+say Blob.&is-class; # OUTPUT: False
 =end code
 
 =head1 DESCRIPTION
@@ -86,6 +86,8 @@ class Configurable {
 
 =head1 METHODS
 
+Note: these only exist after C<Kind> has been parameterized.
+
 =head2 method ACCEPTS
 
     method ACCEPTS(Kind:U: Mu $checker --> Bool:D) { }
@@ -103,8 +105,7 @@ actually have C<Mu>'s methods (this is case with Rakudo's metaroles).
 
     method kind(Kind:U: --> Mu) { }
 
-If C<Kind> has been parameterized, returns its type parameter, otherwise
-fails.
+Returns C<Kind>'s type parameter.
 
 =head1 AUTHOR
 

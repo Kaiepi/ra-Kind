@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/Kaiepi/p6-Kind.svg?branch=master)](https://travis-ci.com/Kaiepi/p6-Kind)
+[![Build Status](https://travis-ci.com/Kaiepi/ra-Kind.svg?branch=master)](https://travis-ci.com/Kaiepi/ra-Kind)
 
 NAME
 ====
@@ -17,8 +17,8 @@ proto sub is-class(Mu --> Bool:D)             {*}
 multi sub is-class(Mu $ where Class --> True) { }
 multi sub is-class(Mu --> False)              { }
 
-say is-class Str;  # OUTPUT: True
-say is-class Blob; # OUTPUT: False
+say Str.&is-class;  # OUTPUT: True
+say Blob.&is-class; # OUTPUT: False
 ```
 
 DESCRIPTION
@@ -84,6 +84,8 @@ class Configurable {
 METHODS
 =======
 
+Note: these only exist after `Kind` has been parameterized.
+
 method ACCEPTS
 --------------
 
@@ -98,7 +100,7 @@ method kind
 
     method kind(Kind:U: --> Mu) { }
 
-If `Kind` has been parameterized, returns its type parameter, otherwise fails.
+Returns `Kind`'s type parameter.
 
 AUTHOR
 ======
