@@ -16,45 +16,6 @@ jobs:
         with:
           path: ~/.raku/
           key: ${{ runner.os }}-${{ hashFiles('META6.json') }}
-      - name: Install modules
-        if: steps.meta6.outputs.cache-hit != 'true'
-        run: zef install --deps-only .
       - name: Test and install for more tests
         run: |
           zef install .
-      - name: Test set-env
-        shell: raku {0}
-        run: |
-          use GitHub::Actions;
-          set-env( 'FOO', 'BAR');
-      - name: Check test result
-        run: |
-          if [[ "${FOO}" == "BAR" ]]; then
-             echo "✓"
-          else
-             exit 1
-          fi
-      - name: Test output
-        id: output_test
-        shell: raku {0}
-        run:
-          use GitHub::Actions;
-          set-output( 'FOO', 'BAR');
-      - name: Check test result
-        env:
-          OUTPUT_FOO: ${{ steps.output_test.outputs.FOO }}
-        run: |
-          if [[ "${OUTPUT_FOO}" == 'BAR' ]]; then
-             echo "✓"
-          else
-             exit 1
-          fi
-      - name: Test set_failed
-        shell: raku {0}
-        run: |
-          use GitHub::Actions;
-          my $proc= shell(".github/workflows/set-failed.raku");
-          set-output( "Exit code is {$proc.exitcode}" );
-
-
-
