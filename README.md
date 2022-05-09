@@ -13,9 +13,9 @@ use Kind;
 
 my constant Class = Kind[Metamodel::ClassHOW];
 
-proto sub is-class(Mu --> Bool:D)             {*}
-multi sub is-class(Mu $ where Class --> True) { }
-multi sub is-class(Mu --> False)              { }
+proto sub is-class(Mu --> Bool:D)  {*}
+multi sub is-class(Class --> True) { }
+multi sub is-class(Mu --> False)   { }
 
 say Str.&is-class;  # OUTPUT: True
 say Blob.&is-class; # OUTPUT: False
@@ -24,7 +24,7 @@ say Blob.&is-class; # OUTPUT: False
 DESCRIPTION
 ===========
 
-Kind is an uninstantiable parametric type that can be used to typecheck values based off their kind. If parameterized, it may be used in a `where` clause or on the right-hand side of a smartmatch to typecheck a value's HOW against its type parameter.
+Kind is an uninstantiable parametric type that can be used to typecheck values based off their kind. A parameterization produces a type object that can process the HOW of a type in a typecheck context with `ACCEPTS` when available, otherwise falling back to the bare typecheck.
 
 Kind is documented. You can view the documentation for it and its methods at any time using `WHY`.
 
@@ -37,10 +37,10 @@ method parameterize
 -------------------
 
 ```raku
-method ^parameterize(Kind:U $this is raw, Mu \K --> Kind:U) { }
+method ^parameterize(Mu $obj is raw, Mu \K) is raw
 ```
 
-Mixes in `kind` and `ACCEPTS` methods. See below.
+Produces a cached subset with a refinement (`where`) built from `K`.
 
 Some useful values with which to parameterize Kind are:
 
@@ -81,29 +81,6 @@ class Configurable {
     }
 }
 ```
-
-METHODS
-=======
-
-method ACCEPTS
---------------
-
-```raku
-method ACCEPTS(Kind:U: Mu $checker is raw) { }
-```
-
-Returns `True` if the HOW of `$checker` typechecks against `Kind`'s type parameter, otherwise returns `False`.
-
-If `Kind`'s type parameter has an `ACCEPTS` method, this will smartmatch the HOW of `$checker` against it; otherwise, `Metamodel::Primitives.is_type` will be called with `$checker`'s HOW and it. Most of the time, the former will be the case; the latter behaviour exists because it's not guaranteed `K` will actually have `Mu`'s methods (this is case with Rakudo's metaroles).
-
-method kind
------------
-
-```raku
-method kind(Kind:U: --> Mu) { }
-```
-
-Returns `Kind`'s type parameter.
 
 AUTHOR
 ======
