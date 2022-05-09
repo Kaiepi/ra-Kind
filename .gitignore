@@ -6,3 +6,5 @@
 /resources/*.dylib
 .precomp/
 /Trait-Kind-*
+.idea
+*~

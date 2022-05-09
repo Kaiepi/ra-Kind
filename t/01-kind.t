@@ -1,4 +1,3 @@
-use v6;
 use Kind;
 use Test;
 
@@ -16,14 +15,6 @@ subtest 'instantiation', {
 };
 
 subtest 'naming', {
-    my class MinimalHOW {
-        my $archetypes = Metamodel::Archetypes.new(:nominal);
-        method archetypes { $archetypes }
-        method new_type(MinimalHOW:_: --> Mu) {
-            my MinimalHOW:D $meta := self.new;
-            Metamodel::Primitives.create_type: $meta, 'Uninstantiable';
-        }
-    }
 
     my class MinimalNamedHOW does Metamodel::Naming {
         my $archetypes = Metamodel::Archetypes.new(:nominal);
