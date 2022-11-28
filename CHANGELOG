@@ -1,22 +1,31 @@
 Revision history for Kind
 
-v0.0.1
+v0.0.1:
     - Initial version
 
-v0.1.0
+v0.1.0:
     - Fallback to typechecking Metamodel::Primitives.is_type when Kind's type
       parameter does not have an ACCEPTS method.
 
-v0.1.1
+v0.1.1:
     - Use v6 instead of v6.d
     - Fix naming of Kind parameterizations where the parameter's HOW has a name
       method, but does not do Metamodel::Naming
 
-v0.2.0
+v0.2.0:
     - Permit use of Kind as an unparameterized type.
 
-v0.2.1
+v0.2.1:
     - Documentation fixes.
 
-v0.2.2
+v0.2.2:
     - Documentation fixes.
+
+v1.0.0:
+    - Kind parameterizes to a subset.
+    - Kind parameterizations are cached.
+    - Mask errors in Junction.ACCEPTS over metaroles with evil THREADing.
+    - Fix archetypical errors in modern Rakudo.
+    - Introduce a kind metamethod to back a subtyped parameterization.
+    - Introduce an our sub set_parameterizer to give a metaobject Kind's
+      parameterization mechanism or override it via wrapper routine.
