@@ -245,12 +245,22 @@ subtest 'typechecking', {
     };
 
     subtest 'Rakudo metaroles', {
-        plan 2;
+        plan 6;
 
         my Bool:D $result = False;
         lives-ok {
             $result = Mu ~~ Kind[Metamodel::AttributeContainer];
-        }, 'typechecking against Kind does not throw...';
+        }, 'typechecking a metaobject against Kind does not throw on a metarole...';
+        ok $result,
+          '...and the result is correct';
+        lives-ok {
+            $result = Mu ~~ Kind[Metamodel::AttributeContainer & Metamodel::REPRComposeProtocol];
+        }, 'typechecking a metaobject against Kind does not throw on a junction of metaroles...';
+        ok $result,
+          '...and the result is correct';
+        lives-ok {
+            $result = Mu & Mu ~~ Kind[Metamodel::AttributeContainer & Metamodel::REPRComposeProtocol];
+        }, 'typechecking a junction of metaobjects against Kind does not throw on a junction of metaroles...';
         ok $result,
           '...and the result is correct';
     };

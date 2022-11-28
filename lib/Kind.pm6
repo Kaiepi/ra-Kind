@@ -4,26 +4,64 @@ use v6;
     object against this will result in a typecheck based on the type's HOW. ]
 unit class Kind:ver<0.2.2>:auth<github:Kaiepi>:api<1> is repr<Uninstantiable>;
 
+# Produces a refinement on CALL-ME.
+my class Refine does Callable is repr<Uninstantiable> { ... }
+
 #|[ Produces a subset with which an object's HOW can be typechecked. ]
-method ^parameterize(Mu $obj is raw, Mu \K) is raw { Metamodel::Primitives.parameterize_type: $obj, K }
+method ^parameterize(Mu $obj is raw, Mu \K) is raw {
+    Metamodel::Primitives.parameterize_type: $obj, (K,)
+}
 
-BEGIN {
-    Metamodel::Primitives.set_parameterizer: $?CLASS,
-        anon only PARAMETERIZE(Mu $obj is raw, [Mu \K]) is raw {
-            only ACCEPTS(Mu \topic) { K.ACCEPTS(topic.HOW).so }
-            only IS-TYPE(Mu \topic) { use nqp; nqp::istype_nd(topic.HOW, K) }
-            my $refinee := Mu;
-            my $refinement := Metamodel::Primitives.is_type(K, Mu) ?? &ACCEPTS !! &IS-TYPE;
-            my $kind := Metamodel::SubsetHOW.new_type: :$refinee, :$refinement;
-            $kind.^set_name: $obj.^name ~ '[' ~ NAME(K) ~ ']';
-            $kind.^set_language_revision: $?CLASS.^language-revision;
-            $kind
-        };
+sub parameterize(Mu $root is raw, Any $args) is raw {
+    my $refinement := Refine(my \K := $args.AT-POS(0));
+    my $name := $root.^name ~ '[' ~ (name K) ~ ']';
+    my $obj := Metamodel::SubsetHOW.new_type: :$name, :refinee(Mu), :$refinement;
+    $obj.^set_language_revision: $root.^language-revision;
+    $obj
+}
 
-    only NAME(Mu $obj is raw --> Str:D) {
+sub name(Mu $obj is raw --> Str:D) {
+    use nqp;
+    (try $obj.raku if nqp::can($obj, 'raku'))
+        orelse ($obj.^name if nqp::can($obj.HOW, 'name'))
+        orelse '?'
+}
+
+my class Refine is Mu {
+    proto method CALL-ME(Mu) {*}
+    multi method CALL-ME(Mu $topic is raw) {
+        self.ACCEPTS: $topic<>
+    }
+    multi method CALL-ME(Junction:D $junction is copy) {
+        # We need to wrap uninvokable refinements to appease Rakudo.
+        # Mu.ACCEPTS makes for a method of invoking Junction.THREAD.
+        $junction := self.ACCEPTS: $junction;
+        anon sub accepts(Mu $topic) is pure { $junction.ACCEPTS: $topic }
+    }
+
+    # A Mu parameter is actually untyped. An nqp-ish metaobject (e.g. Rakudo's
+    # metaroles) are not actually Mu, and thus demand a special smartmatch.
+    multi method ACCEPTS(Mu \K) {
+        Metamodel::Primitives.is_type(K, Mu) ?? (match K) !! (check K)
+    }
+
+    # Smartmatch handler. We need to match HOWs generally, but Junction.ACCEPTS
+    # can't cope with when its components aren't Mu, so abuse Junction.THREAD.
+    proto sub match(Mu) {*}
+    multi sub match(Mu \K) {
+        anon sub accepts-higher(Mu $topic) is pure { ?K.ACCEPTS: $topic.HOW }
+    }
+    multi sub match(Junction:D $junction) {
+        $?CLASS.ACCEPTS: $junction
+    }
+
+    # Typecheck handler. We can assume an object that isn't Mu isn't HLL
+    # either, so spare any delegation to Metamodel::Primitives.is_type.
+    sub check(Mu \K) {
         use nqp;
-        (try $obj.raku if nqp::can($obj, 'raku')) orelse
-        (try $obj.^name if nqp::can($obj.HOW, 'name')) orelse
-        '?'
+        anon sub is-type(Mu $topic) is pure { nqp::hllbool(nqp::istype_nd($topic.HOW,K)) }
     }
 }
+
+
+BEGIN Metamodel::Primitives.set_parameterizer: $?CLASS, &parameterize;
