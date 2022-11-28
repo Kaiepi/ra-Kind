@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/Kaiepi/p6-Kind.svg?branch=master)](https://travis-ci.com/Kaiepi/p6-Kind)
+[![Build Status](https://github.com/Kaiepi/ra-Kind/actions/workflows/test.yaml/badge.svg)](https://github.com/Kaiepi/ra-Kind/actions/workflows/test.yaml)
 
 NAME
 ====
@@ -132,7 +132,7 @@ Ben Davies (Kaiepi)
 COPYRIGHT AND LICENSE
 =====================
 
-Copyright 2020 Ben Davies
+Copyright 2022 Ben Davies
 
 This library is free software; you can redistribute it and/or modify it under the Artistic License 2.0.
 
