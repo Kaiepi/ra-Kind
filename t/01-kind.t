@@ -15,11 +15,21 @@ subtest 'instantiation', {
 };
 
 subtest 'naming', {
+    my class MinimalHOW {
+        my constant ARCHETYPES = Metamodel::Archetypes.new: :nominal;
+        method archetypes(::?CLASS:_: $? --> ARCHETYPES) { }
+
+        method new_type(::?CLASS:_:) is raw {
+            my MinimalHOW:D $meta := self.new;
+            Metamodel::Primitives.create_type: $meta, 'Uninstantiable';
+        }
+    }
 
     my class MinimalNamedHOW does Metamodel::Naming {
-        my $archetypes = Metamodel::Archetypes.new(:nominal);
-        method archetypes { $archetypes }
-        method new_type(MinimalNamedHOW:_: Str:D :$name! --> Mu) {
+        my constant ARCHETYPES = Metamodel::Archetypes.new: :nominal;
+        method archetypes(::?CLASS:_: Mu $? --> ARCHETYPES) { }
+
+        method new_type(::?CLASS:_: Str:D :$name!) is raw {
             my MinimalNamedHOW:D $meta := self.new;
             my Mu                $type := Metamodel::Primitives.create_type: $meta, 'Uninstantiable';
             $meta.set_name: $type, $name;
@@ -207,10 +217,10 @@ subtest 'typechecking', {
 
         my constant Unknown = do {
             my class UnknownHOW does Metamodel::Naming {
-                my $archetypes = Metamodel::Archetypes.new(:nominal);
-                method archetypes { $archetypes }
+                my constant ARCHETYPES = Metamodel::Archetypes.new: :nominal;
+                method archetypes(::?CLASS:_: Mu $? --> ARCHETYPES) { }
 
-                method new_type(UnknownHOW:_: --> Mu) {
+                method new_type(::?CLASS:_: --> Mu) {
                     my UnknownHOW:D $meta := self.new;
                     my Mu           $type := Metamodel::Primitives.create_type: $meta, 'Uninstantiable';
                     Metamodel::Primitives.configure_type_checking: $type, (), :!authoritative, :call_accepts;
