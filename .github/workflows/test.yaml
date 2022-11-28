@@ -1,8 +1,9 @@
-name: "Test in a Raku container"
+name: Build Status
 on: [ push, pull_request ]
 jobs:
   test:
     runs-on: ubuntu-latest
+    name: Test Kind
     permissions:
       packages: read
     container:
@@ -16,6 +17,6 @@ jobs:
         with:
           path: ~/.raku/
           key: ${{ runner.os }}-${{ hashFiles('META6.json') }}
-      - name: Test and install for more tests
+      - name: Run tests
         run: |
           zef install .
