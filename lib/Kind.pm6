@@ -7,12 +7,26 @@ unit class Kind:ver<0.2.2>:auth<github:Kaiepi>:api<1> is repr<Uninstantiable>;
 # Produces a refinement on CALL-ME.
 my class Refine does Callable is repr<Uninstantiable> { ... }
 
+#|[ Delegates to ^kind. ]
+method ^parameterize(|args) is raw {
+    self.kind: |args
+}
+
 #|[ Produces a subset with which an object's HOW can be typechecked. ]
-method ^parameterize(Mu $obj is raw, Mu \K) is raw {
+method ^kind(Mu $obj is raw, Mu \K) is raw {
     Metamodel::Primitives.parameterize_type: $obj, (K,)
 }
 
-sub parameterize(Mu $root is raw, Any $args) is raw {
+#|[ Applies a parameterizer to a metaobject so as to support ^kind. ]
+our sub set_parameterizer(Mu $obj is raw, &parameterizer = &parameterize --> Nil) {
+    Metamodel::Primitives.set_parameterizer: $obj, &parameterizer
+}
+#=[ The metaobject doesn't need to be a true Kind, but the parameterizer should
+    generally incorporate &parameterize in some way, otherwise you're better off
+    writing a new type. ]
+
+#|[ The routine that produces the actual subset cached by ^kind. ]
+our sub parameterize(Mu $root is raw, Any $args) is raw {
     my $refinement := Refine(my \K := $args.AT-POS(0));
     my $name := $root.^name ~ '[' ~ (name K) ~ ']';
     my $obj := Metamodel::SubsetHOW.new_type: :$name, :refinee(Mu), :$refinement;
@@ -63,5 +77,4 @@ my class Refine is Mu {
     }
 }
 
-
-BEGIN Metamodel::Primitives.set_parameterizer: $?CLASS, &parameterize;
+BEGIN set_parameterizer $?CLASS;

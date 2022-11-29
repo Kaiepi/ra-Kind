@@ -26,9 +26,7 @@ DESCRIPTION
 
 Kind is an uninstantiable parametric type that can be used to typecheck values based off their kind. A parameterization produces a type object that can process the HOW of a type in a typecheck context with `ACCEPTS` when available, otherwise falling back to the bare typecheck.
 
-Kind is documented. You can view the documentation for it and its methods at any time using `WHY`.
-
-For examples of how to use Kind with any of Rakudo's kinds, see `t/01-kind.t`.
+Kind is documented. You can view the documentation for it and its methods at any time using `WHY`. For more examples of how to work with Kind, refer to `t/01-kind.t`.
 
 METAMETHODS
 ===========
@@ -37,12 +35,21 @@ method parameterize
 -------------------
 
 ```raku
-method ^parameterize(Mu $obj is raw, Mu \K) is raw
+method ^parameterize(|args) is raw
 ```
 
-Produces a cached subset with a refinement (`where`) built from `K`.
+Produces a parameterization by delegating to `^kind` with `args`.
 
-Some useful values with which to parameterize Kind are:
+method kind
+-----------
+
+```raku
+method ^kind(Mu $obj is raw, Mu \K) is raw
+```
+
+Produces a cached subset with a refinement (`where`) built from `K`. This backs `^parameterize` so as to allow for a different parameterizer in a subtype. This is more or less a wrapper for `Metamodel::Primitives.parameterize_type`.
+
+Some useful values with which to produce a type are:
 
   * a metaclass or metarole
 
@@ -81,6 +88,35 @@ class Configurable {
     }
 }
 ```
+
+SYMBOLS
+=======
+
+&set_parameterizer
+------------------
+
+```raku
+our sub set_parameterizer(Mu $obj is raw, &parameterizer = &parameterize --> Nil)
+```
+
+Applies the parameterizer of `Kind` to a metaobject, providing it with a parameterization cache. A subtype needs to apply this at `BEGIN`-time in order to parameterize with the default metamethods, for instance:
+
+```raku
+class Kind::Instantiable is Kind {
+    BEGIN Kind::set_parameterizer($?CLASS);
+}
+```
+
+A `&parameterizer` may be provided, in which case that will be set instead. This should carry a compatible signature with `&parameterize`.
+
+&parameterize
+-------------
+
+```raku
+our sub parameterize(Mu $root is raw, Any $args) is raw
+```
+
+Given the `$root` metaobject of the parameterization and its `$args`, produces a type object minus the caching. `$args` is assumed to carry `K` at position `0`.
 
 AUTHOR
 ======

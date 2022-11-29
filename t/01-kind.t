@@ -1,7 +1,7 @@
 use Kind;
 use Test;
 
-plan 3;
+plan 4;
 
 subtest 'instantiation', {
     plan 3;
@@ -261,6 +261,59 @@ subtest 'typechecking', {
         lives-ok {
             $result = Mu & Mu ~~ Kind[Metamodel::AttributeContainer & Metamodel::REPRComposeProtocol];
         }, 'typechecking a junction of metaobjects against Kind does not throw on a junction of metaroles...';
+        ok $result,
+          '...and the result is correct';
+    };
+};
+
+subtest 'inheritance', {
+    plan 2;
+
+    subtest 'input mapping', {
+        my class Kind::Of::Type is Kind is repr<Uninstantiable> {
+            method ^parameterize(Mu $obj is raw, Mu \K, |rest) {
+                self.kind: $obj, K.HOW.WHAT, |rest
+            }
+
+            BEGIN Kind::set_parameterizer($?CLASS);
+        }
+
+        plan 2;
+
+        my $result = False;
+        lives-ok {
+            $result = Mu ~~ Kind::Of::Type[class { }];
+        }, 'smartmatching against a subtype of Kind does not throw...';
+        ok $result,
+          '...and the result is correct';
+    };
+
+    subtest 'output mapping', {
+        my class Kind::Old is Kind is repr<Uninstantiable> {
+            # XXX: Could be inlined into Kind::Old in theory, but is uninstantiable
+            # from the parameterizer as a P6opaque. Anything but the root seems OK.
+            class Descriptor {
+                has $.kind is built(:bind);
+                has $!type is built(:bind);
+
+                multi method ACCEPTS(::?CLASS:D: Mu $topic is raw) is raw {
+                    $!type.ACCEPTS: $topic
+                }
+            }
+
+            sub parameterize(Mu $root is raw, Any $args) {
+                Descriptor.bless: :kind($args.AT-POS: 0), :type(Kind::parameterize($root, $args))
+            }
+
+            BEGIN Kind::set_parameterizer($?CLASS, &parameterize);
+        }
+
+        plan 2;
+
+        my $result = False;
+        lives-ok {
+            $result = Mu ~~ Kind::Old[Metamodel::ClassHOW];
+        }, 'smartmatching against a subtype of Kind does not throw...';
         ok $result,
           '...and the result is correct';
     };

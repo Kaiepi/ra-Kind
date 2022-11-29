@@ -29,20 +29,29 @@ process the HOW of a type in a typecheck context with C<ACCEPTS> when
 available, otherwise falling back to the bare typecheck.
 
 Kind is documented. You can view the documentation for it and its methods at
-any time using C<WHY>.
-
-For examples of how to use Kind with any of Rakudo's kinds, see C<t/01-kind.t>.
+any time using C<WHY>. For more examples of how to work with Kind, refer to
+C<t/01-kind.t>.
 
 =head1 METAMETHODS
 
 =head2 method parameterize
 
 =for code :lang<raku>
-method ^parameterize(Mu $obj is raw, Mu \K) is raw
+method ^parameterize(|args) is raw
 
-Produces a cached subset with a refinement (C<where>) built from C<K>.
+Produces a parameterization by delegating to C<^kind> with C<args>.
 
-Some useful values with which to parameterize Kind are:
+=head2 method kind
+
+=for code :lang<raku>
+method ^kind(Mu $obj is raw, Mu \K) is raw
+
+Produces a cached subset with a refinement (C<where>) built from C<K>. This
+backs C<^parameterize> so as to allow for a different parameterizer in a
+subtype. This is more or less a wrapper for
+C<Metamodel::Primitives.parameterize_type>.
+
+Some useful values with which to produce a type are:
 
 =item a metaclass or metarole
 
@@ -78,6 +87,34 @@ class Configurable {
     }
 }
 =end code
+
+=head1 SYMBOLS
+
+=head2 &set_parameterizer
+
+=for code :lang<raku>
+our sub set_parameterizer(Mu $obj is raw, &parameterizer = &parameterize --> Nil)
+
+Applies the parameterizer of C<Kind> to a metaobject, providing it with a
+parameterization cache. A subtype needs to apply this at C<BEGIN>-time in order
+to parameterize with the default metamethods, for instance:
+
+=for code :lang<raku>
+class Kind::Instantiable is Kind {
+    BEGIN Kind::set_parameterizer($?CLASS);
+}
+
+A C<&parameterizer> may be provided, in which case that will be set instead.
+This should carry a compatible signature with C<&parameterize>.
+
+=head2 &parameterize
+
+=for code :lang<raku>
+our sub parameterize(Mu $root is raw, Any $args) is raw
+
+Given the C<$root> metaobject of the parameterization and its C<$args>,
+produces a type object minus the caching. C<$args> is assumed to carry C<K> at
+position C<0>.
 
 =head1 AUTHOR
 
