@@ -203,13 +203,16 @@ subtest 'typechecking', {
 
     subtest 'metaobjects', {
         my class Configurable {
-            my Map:D %CONFIGURATIONS{ObjAt:D};
+            my constant K := Kind[$?CLASS.HOW.WHAT, $?CLASS];
 
-            method ^configure(Configurable:_ $this where Kind[self], %configuration --> Map:D) {
-                %CONFIGURATIONS{$this.WHAT.WHICH} := %configuration.Map
+            my constant %configuration := hash;
+
+            method ^configure(K $obj, %config --> Map:D) {
+                %configuration{$obj.WHAT.WHICH} := %config.Map
             }
-            method ^configuration(Configurable:_ $this where Kind[self] --> Map:D) {
-                %CONFIGURATIONS{$this.WHAT.WHICH} // Map.new
+
+            method ^configuration(K $obj --> Map:D) {
+                %configuration{$obj.WHAT.WHICH} // Map.new
             }
         }
 

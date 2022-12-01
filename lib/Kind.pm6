@@ -13,8 +13,8 @@ method ^parameterize(|args) is raw {
 }
 
 #|[ Produces a subset with which an object's HOW can be typechecked. ]
-method ^kind(Mu $obj is raw, Mu \K) is raw {
-    Metamodel::Primitives.parameterize_type: $obj, (K,)
+method ^kind(Mu $obj is raw, Mu \K, Mu:U \T = Mu) is raw {
+    Metamodel::Primitives.parameterize_type: $obj, K, do T unless T =:= Mu
 }
 
 #|[ Applies a parameterizer to a metaobject so as to support ^kind. ]
@@ -27,9 +27,10 @@ our sub set_parameterizer(Mu $obj is raw, &parameterizer = &parameterize --> Nil
 
 #|[ The routine that produces the actual subset cached by ^kind. ]
 our sub parameterize(Mu $root is raw, Any $args) is raw {
+    my \T := $args.EXISTS-POS(1) ?? $args.AT-POS(1) !! Mu;
     my $refinement := Refine(my \K := $args.AT-POS(0));
-    my $name := $root.^name ~ '[' ~ (name K) ~ ']';
-    my $obj := Metamodel::SubsetHOW.new_type: :$name, :refinee(Mu), :$refinement;
+    my $name := $root.^name ~ '[' ~ (name K) ~ (', ' ~ name T unless T =:= Mu) ~ ']';
+    my $obj := Metamodel::SubsetHOW.new_type: :$name, :refinee(T), :$refinement;
     $obj.^set_language_revision: $root.^language-revision;
     $obj
 }

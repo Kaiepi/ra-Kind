@@ -44,10 +44,10 @@ method kind
 -----------
 
 ```raku
-method ^kind(Mu $obj is raw, Mu \K) is raw
+method ^kind(Mu $obj is raw, Mu \K, Mu:U \T = Mu) is raw
 ```
 
-Produces a cached subset with a refinement (`where`) built from `K`. This backs `^parameterize` so as to allow for a different parameterizer in a subtype. This is more or less a wrapper for `Metamodel::Primitives.parameterize_type`.
+Produces a cached subset with a refinement (`where`) built from `K` and a refinement (`of`) from `T` if present. This backs `^parameterize` so as to allow for a different parameterizer in a subtype. This is more or less a wrapper for `Metamodel::Primitives.parameterize_type`.
 
 Some useful values with which to produce a type are:
 
@@ -75,16 +75,18 @@ Kind[{ use nqp; nqp::hllbool(nqp::can($_, 'parameterize')) }]
   * a metaobject
 
 ```raku
-# This class' metamethods ensure they can only be called with itself or its
-# subclasses.
+# This class' metamethods constrain their metaobject to itself or its subtypes.
 class Configurable {
-    my Map:D %CONFIGURATIONS{ObjAt:D};
+    my constant K := Kind[$?CLASS.HOW.WHAT, $?CLASS];
 
-    method ^configure(Configurable:_ $this where Kind[self], %configuration --> Map:D) {
-        %CONFIGURATIONS{$this.WHAT.WHICH} := %configuration.Map
+    my constant %configuration := hash;
+
+    method ^configure(K $obj, %config --> Map:D) {
+        %configuration{$obj.WHAT.WHICH} := %config.Map
     }
-    method ^configuration(Configurable:_ $this where Kind[self] --> Map:D) {
-        %CONFIGURATIONS{$this.WHAT.WHICH} // Map.new
+
+    method ^configuration(K $obj --> Map:D) {
+        %configuration{$obj.WHAT.WHICH} // Map.new
     }
 }
 ```
@@ -116,7 +118,7 @@ A `&parameterizer` may be provided, in which case that will be set instead. This
 our sub parameterize(Mu $root is raw, Any $args) is raw
 ```
 
-Given the `$root` metaobject of the parameterization and its `$args`, produces a type object minus the caching. `$args` is assumed to carry `K` at position `0`.
+Given the `$root` metaobject of the parameterization and its `$args`, produces a type object minus the caching. `$args` is assumed to carry `K` at position `0` and `T`, if present, at position `1`.
 
 AUTHOR
 ======
