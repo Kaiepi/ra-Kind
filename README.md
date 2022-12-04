@@ -24,9 +24,9 @@ say Blob.&is-class; # OUTPUT: False
 DESCRIPTION
 ===========
 
-Kind is an uninstantiable parametric type that can be used to typecheck values based off their kind. A parameterization produces a type object that can process the HOW of a type in a typecheck context with `ACCEPTS` when available, otherwise falling back to the bare typecheck.
+`Kind` is an uninstantiable parametric type that can be used to typecheck values based off their kind. A parameterization produces a type object that can process the HOW of a type in a typecheck context with `ACCEPTS` when available, otherwise falling back to the bare typecheck.
 
-Kind is documented. You can view the documentation for it and its methods at any time using `WHY`.
+`Kind` is documented. You can view the documentation for it and its methods at any time using `WHY`.
 
 METAMETHODS
 ===========

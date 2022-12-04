@@ -23,12 +23,12 @@ say Blob.&is-class; # OUTPUT: False
 
 =head1 DESCRIPTION
 
-Kind is an uninstantiable parametric type that can be used to typecheck values
-based off their kind. A parameterization produces a type object that can
+C<Kind> is an uninstantiable parametric type that can be used to typecheck
+values based off their kind. A parameterization produces a type object that can
 process the HOW of a type in a typecheck context with C<ACCEPTS> when
 available, otherwise falling back to the bare typecheck.
 
-Kind is documented. You can view the documentation for it and its methods at
+C<Kind> is documented. You can view the documentation for it and its methods at
 any time using C<WHY>.
 
 =head1 METAMETHODS
