@@ -13,7 +13,7 @@
   "source-url" : "https://github.com/Kaiepi/ra-Kind.git",
   "tags" : [ "kind", "type" ],
   "test-depends" : [ ],
-  "version" : "1.0.0",
+  "version" : "1.0.1",
   "auth" : "zef:Kaiepi",
   "api" : "2"
 }

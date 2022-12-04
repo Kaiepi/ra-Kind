@@ -2,7 +2,7 @@ use v6;
 #|[ An uninstantiable parametric type that can be used to typecheck values based
     on their kind. Once parameterized with a kind of type, smartmatching a type
     object against this will result in a typecheck based on the type's HOW. ]
-unit class Kind:ver<1.0.0>:auth<zef:Kaiepi>:api<2> is repr<Uninstantiable>;
+unit class Kind:ver<1.0.1>:auth<zef:Kaiepi>:api<2> is repr<Uninstantiable>;
 
 # Produces a refinement on CALL-ME.
 my class Refine does Callable is repr<Uninstantiable> { ... }

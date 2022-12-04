@@ -29,3 +29,6 @@ v1.0.0:
     - Introduce a kind metamethod to back a subtyped parameterization.
     - Introduce an our sub set_parameterizer to give a metaobject Kind's
       parameterization mechanism or override it via wrapper routine.
+
+v1.0.1:
+    - Fix error in result type in t/01-typecheck.t's Junction-Junction test.
