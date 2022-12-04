@@ -29,8 +29,7 @@ process the HOW of a type in a typecheck context with C<ACCEPTS> when
 available, otherwise falling back to the bare typecheck.
 
 Kind is documented. You can view the documentation for it and its methods at
-any time using C<WHY>. For more examples of how to work with Kind, refer to
-C<t/01-kind.t>.
+any time using C<WHY>.
 
 =head1 METAMETHODS
 
@@ -90,6 +89,9 @@ class Configurable {
 }
 =end code
 
+For more examples of parameterizations of C<Kind>, refer to
+C<t/01-typecheck.t>.
+
 =head1 SYMBOLS
 
 =head2 &set_parameterizer
@@ -108,6 +110,8 @@ class Kind::Instantiable is Kind {
 
 A C<&parameterizer> may be provided, in which case that will be set instead.
 This should carry a compatible signature with C<&parameterize>.
+
+For more examples of how to subclass C<Kind>, refer to C<t/02-meta.t>.
 
 =head2 &parameterize
 

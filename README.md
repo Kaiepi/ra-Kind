@@ -26,7 +26,7 @@ DESCRIPTION
 
 Kind is an uninstantiable parametric type that can be used to typecheck values based off their kind. A parameterization produces a type object that can process the HOW of a type in a typecheck context with `ACCEPTS` when available, otherwise falling back to the bare typecheck.
 
-Kind is documented. You can view the documentation for it and its methods at any time using `WHY`. For more examples of how to work with Kind, refer to `t/01-kind.t`.
+Kind is documented. You can view the documentation for it and its methods at any time using `WHY`.
 
 METAMETHODS
 ===========
@@ -91,6 +91,8 @@ class Configurable {
 }
 ```
 
+For more examples of parameterizations of `Kind`, refer to `t/01-typecheck.t`.
+
 SYMBOLS
 =======
 
@@ -110,6 +112,8 @@ class Kind::Instantiable is Kind {
 ```
 
 A `&parameterizer` may be provided, in which case that will be set instead. This should carry a compatible signature with `&parameterize`.
+
+For more examples of how to subclass `Kind`, refer to `t/02-meta.t`.
 
 &parameterize
 -------------
