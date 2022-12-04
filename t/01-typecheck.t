@@ -210,7 +210,7 @@ subtest 'Rakudo metaroles', {
     ok $result,
       '...and the result is correct';
     lives-ok {
-        $result = Mu & Mu ~~ Kind[Metamodel::AttributeContainer & Metamodel::REPRComposeProtocol];
+        $result = so Mu & Mu ~~ Kind[Metamodel::AttributeContainer & Metamodel::REPRComposeProtocol];
     }, 'typechecking a junction of metaobjects against Kind does not throw on a junction of metaroles...';
     ok $result,
       '...and the result is correct';
