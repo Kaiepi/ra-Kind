@@ -32,3 +32,7 @@ v1.0.0:
 
 v1.0.1:
     - Fix error in result type in t/01-typecheck.t's Junction-Junction test.
+
+v1.0.2:
+    - Eliminate dead code pertaining to Junction:D after a threading by ACCEPTS
+      in internal class Refine.
