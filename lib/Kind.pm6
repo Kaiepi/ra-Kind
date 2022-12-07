@@ -60,14 +60,9 @@ my class Refine is Mu {
         Metamodel::Primitives.is_type(K, Mu) ?? (match K) !! (check K)
     }
 
-    # Smartmatch handler. We need to match HOWs generally, but Junction.ACCEPTS
-    # can't cope with when its components aren't Mu, so abuse Junction.THREAD.
-    proto sub match(Mu) {*}
-    multi sub match(Mu \K) {
+    # Smartmatch handler. Spare &[~~]'s dispatch for the more uniform check.
+    sub match(Mu \K) {
         anon sub accepts-higher(Mu $topic) is pure { ?K.ACCEPTS: $topic.HOW }
-    }
-    multi sub match(Junction:D $junction) {
-        $?CLASS.ACCEPTS: $junction
     }
 
     # Typecheck handler. We can assume an object that isn't Mu isn't HLL
