@@ -55,7 +55,7 @@ my class Refine is Mu {
     }
 
     # A Mu parameter is actually untyped. An nqp-ish metaobject (e.g. Rakudo's
-    # metaroles) are not actually Mu, and thus demand a special smartmatch.
+    # metaroles) is not actually Mu, and thus demand a special smartmatch.
     multi method ACCEPTS(Mu \K) {
         Metamodel::Primitives.is_type(K, Mu) ?? (match K) !! (check K)
     }
