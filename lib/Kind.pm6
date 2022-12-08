@@ -54,8 +54,8 @@ my class Refine is Mu {
         anon sub accepts(Mu $topic) is pure { ?$junction.ACCEPTS: $topic }
     }
 
-    # A Mu parameter is actually untyped. An nqp-ish metaobject (e.g. Rakudo's
-    # metaroles) is not actually Mu, and thus demand a special smartmatch.
+    # A Mu parameter is actually untyped. An nqp-ish metaobject (e.g. a
+    # metarole of Rakudo's) is not Mu by default, and thus takes due care.
     multi method ACCEPTS(Mu \K) {
         Metamodel::Primitives.is_type(K, Mu) ?? (match K) !! (check K)
     }
