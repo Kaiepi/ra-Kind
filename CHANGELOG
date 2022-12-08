@@ -36,3 +36,6 @@ v1.0.1:
 v1.0.2:
     - Eliminate dead code pertaining to Junction:D after a threading by ACCEPTS
       in internal class Refine.
+
+v1.0.3:
+    - Eagerly boolify junctions for a slightly cheaper typecheck.
