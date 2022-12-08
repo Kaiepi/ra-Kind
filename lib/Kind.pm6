@@ -51,7 +51,7 @@ my class Refine is Mu {
         # We need to wrap uninvokable refinements to appease Rakudo.
         # Mu.ACCEPTS makes for a method of invoking Junction.THREAD.
         $junction := self.ACCEPTS: $junction;
-        anon sub accepts(Mu $topic) is pure { $junction.ACCEPTS: $topic }
+        anon sub accepts(Mu $topic) is pure { ?$junction.ACCEPTS: $topic }
     }
 
     # A Mu parameter is actually untyped. An nqp-ish metaobject (e.g. Rakudo's
